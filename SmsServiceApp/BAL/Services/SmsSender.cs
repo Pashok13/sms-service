@@ -44,7 +44,7 @@ namespace WebApp.Services
 			clientSMPP.OnSmppStatusReportReceived += SMSCclientSMPP_OnSmppStatusReportReceived;
 			clientSMPP.OnSmppSubmitResponseAsyncReceived += SMSCclientSMPP_OnSmppSubmitResponseAsyncReceived;
 
-			Task.Run(() => Connect());
+			//Task.Run(() => Connect());
 		}
 
 		#region Connection methods
@@ -92,11 +92,11 @@ namespace WebApp.Services
 		/// <param name="messages">Collection of messages for send</param>
 		public async Task SendMessages(IEnumerable<MessageDTO> messages)
 		{
-			if (!clientSMPP.Connected)
-				await Connect();
+			//if (!clientSMPP.Connected)
+			//	await Connect();
 
-			foreach (MessageDTO message in messages)
-				SendMessage(message);
+			//foreach (MessageDTO message in messages)
+			//	SendMessage(message);
 		}
 
 		/// <summary>
