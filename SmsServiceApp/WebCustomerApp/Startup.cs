@@ -53,14 +53,14 @@ namespace WebApp
 
 			services.AddAuthentication().AddFacebook(facebookOptions =>
 			{
-				facebookOptions.AppId = "650976532012853";
-				facebookOptions.AppSecret = "bafe321bce69a757c812991f4468597e";
+				facebookOptions.AppId = "2583511871865094";
+				facebookOptions.AppSecret = "23c57f70f103ec1ede7b7bfed69c3392";
 			});
 
 			services.AddAuthentication().AddGoogle(configureOptions =>
 			{
-				configureOptions.ClientId = "91528411350-j52vl6bbdp58ild09dqelr9n4ccl11vf.apps.googleusercontent.com";
-				configureOptions.ClientSecret = "11May0pGIYDGLc0ZO0GNi05y";
+				configureOptions.ClientId = "411608667325-9gi3b1ducj0koi3phgtqfldsrgj3mgsh.apps.googleusercontent.com";
+				configureOptions.ClientSecret = "MCLIhsKu33J-MbpolgkMaFwM";
 			});
             // Add application services.
             services.AddSingleton<ILoggerManager, LoggerManager>();
