@@ -59,8 +59,8 @@ namespace WebApp
 
 			services.AddAuthentication().AddGoogle(configureOptions =>
 			{
-				configureOptions.ClientId = "411608667325-9gi3b1ducj0koi3phgtqfldsrgj3mgsh.apps.googleusercontent.com";
-				configureOptions.ClientSecret = "MCLIhsKu33J-MbpolgkMaFwM";
+				configureOptions.ClientId = "848821037626-ltq8hia5er9a1b2edfob2nggdulot0qr.apps.googleusercontent.com";
+				configureOptions.ClientSecret = "Vrl-5TieitnbtlleY1mT7ppc";
 			});
             // Add application services.
             services.AddSingleton<ILoggerManager, LoggerManager>();
