@@ -20,7 +20,7 @@ namespace WebApp.Services
 
         public Task SendEmailAsync(string email, string subject, string message)
 		{
-			var from = "q.u.i.c.k.sender.r.r@gmail.com";
+			var from = "smssssender@gmail.com";
 			var pass = "quicksender123";
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
 			client.DeliveryMethod = SmtpDeliveryMethod.Network;
