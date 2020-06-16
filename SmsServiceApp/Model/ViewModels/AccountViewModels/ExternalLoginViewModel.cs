@@ -16,7 +16,7 @@ namespace Model.ViewModels.AccountViewModels
 		[Required(ErrorMessage = "The Phone field is required.")]
 		[Phone]
 		[Display(Name = "Phone")]
-		[RegularExpression(@"^\+[0-9]{11,12}$", ErrorMessage = "Wrong phone number")]
+		[RegularExpression(@"^\+[0-9]{10,12}$", ErrorMessage = "Wrong phone number")]
 		public string Phone { get; set; }
 
 		[Display(Name = "Corporation")]

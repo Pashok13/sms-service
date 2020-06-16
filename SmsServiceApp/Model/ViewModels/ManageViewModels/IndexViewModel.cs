@@ -24,7 +24,7 @@ namespace Model.ViewModels.ManageViewModels
 
         [Phone]
         [Display(Name = "Phone number")]
-		[RegularExpression(@"^\+[0-9]{11,12}$", ErrorMessage = "Wrong phone number")]
+		[RegularExpression(@"^\+[0-9]{10,12}$", ErrorMessage = "Wrong phone number")]
 		public string PhoneNumber { get; set; }
 
         [Display(Name = "Group member")]

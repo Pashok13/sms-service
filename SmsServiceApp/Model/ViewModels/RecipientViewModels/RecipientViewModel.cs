@@ -14,7 +14,7 @@ namespace Model.ViewModels.RecipientViewModels
         public int CompanyId { get; set; }
         [Required(ErrorMessage = "The Phone Number field is required.")]
         [Display(Name = "Phone Number")]
-        [RegularExpression(@"^\+[0-9]{12}$", ErrorMessage = "Not a valid phone number")]
+        [RegularExpression(@"^\+[0-9]{10,12}$", ErrorMessage = "Not a valid phone number")]
         public string Phonenumber { get; set; }
         [StringLength(100)]
         [Display(Name = "Name")]
