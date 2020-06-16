@@ -38,9 +38,13 @@ namespace WebApp.Services
 		/// </summary>
 		/// <param name="KeepAliveInterval">Property for changing connection time(seconds) with server</param>
 		/// <param name="serviceScopeFactory">instance of static service</param>
-		public SmsSender(IServiceScopeFactory serviceScopeFactory, IOptions<TwilioAccountDetails> _twilioAccountDetails)
+		public SmsSender(IServiceScopeFactory serviceScopeFactory)
 		{
-			this.twilioAccountDetails = _twilioAccountDetails.Value ?? throw new ArgumentException(nameof(_twilioAccountDetails));
+			this.twilioAccountDetails = new TwilioAccountDetails()
+			{
+				AccountSid = "AC6fef93d6dff1c4286efb77fbaabb8fc6",
+				AuthToken = "de414b9d9a1bfe1a0d7d6312f353b9f0"
+			};
 			this.serviceScopeFactory = serviceScopeFactory;
 		}
 
