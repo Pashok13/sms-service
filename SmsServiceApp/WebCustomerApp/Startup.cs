@@ -29,6 +29,9 @@ using WebApp.Extensions;
 using BAL.Notifications.Infrastructure;
 using BAL.Notifications;
 using BAL.Wrappers;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using System.Threading.Tasks;
+using Model.DTOs;
 
 namespace WebApp
 {
@@ -51,7 +54,9 @@ namespace WebApp
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-			services.AddAuthentication().AddFacebook(facebookOptions =>
+            services.Configure<TwilioAccountDetails>(Configuration.GetSection("TwilioAccountDetails"));
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
 			{
 				facebookOptions.AppId = "2583511871865094";
 				facebookOptions.AppSecret = "23c57f70f103ec1ede7b7bfed69c3392";
@@ -61,6 +66,16 @@ namespace WebApp
 			{
 				configureOptions.ClientId = "848821037626-ltq8hia5er9a1b2edfob2nggdulot0qr.apps.googleusercontent.com";
 				configureOptions.ClientSecret = "Vrl-5TieitnbtlleY1mT7ppc";
+
+                configureOptions.Events = new OAuthEvents()
+                {
+                    OnRemoteFailure = (context) =>
+                    {
+                        context.Response.Redirect(context?.Properties?.GetString("returnUrl"));
+                        context.HandleResponse();
+                        return Task.CompletedTask;
+                    }
+                };
 			});
             // Add application services.
             services.AddSingleton<ILoggerManager, LoggerManager>();
