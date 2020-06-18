@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Model.DTOs;
 using System.Collections.Generic;
 using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace WebApp.Services
@@ -12,6 +13,8 @@ namespace WebApp.Services
     public class EmailSender : IEmailSender
     {
         private readonly IServiceScopeFactory serviceScopeFactory;
+        public const string from = "smssssender@gmail.com";
+        public const string code = "quicksender123";
 
         public EmailSender(IServiceScopeFactory serviceScopeFactory)
         {
@@ -20,14 +23,14 @@ namespace WebApp.Services
 
         public Task SendEmailAsync(string email, string subject, string message)
 		{
-			var from = "smssssender@gmail.com";
-			var pass = "quicksender123";
-            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-			client.DeliveryMethod = SmtpDeliveryMethod.Network;
-			client.UseDefaultCredentials = false;
-			client.Credentials = new System.Net.NetworkCredential(from, pass);
-			client.EnableSsl = true;
-			var mail = new MailMessage(from, email);
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
+            {
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                EnableSsl = true,
+                Credentials = new System.Net.NetworkCredential(from, code)
+            };
+            var mail = new MailMessage(from, email);
 			mail.Subject = subject;
 			mail.Body = message;
 			mail.IsBodyHtml = true;
@@ -36,17 +39,19 @@ namespace WebApp.Services
 
         public Task SendEmail(EmailDTO emailDTO)
         {
-            SmtpClient client = new SmtpClient
-            {
-                Port = 2526,
-                Host = "localhost"
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587) 
+            { 
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                EnableSsl = true,
+                Credentials = new System.Net.NetworkCredential(from, code)
             };
             MailMessage email = new MailMessage()
             {
                 From = new MailAddress(emailDTO.SenderEmail),
                 Body = emailDTO.MessageText,
                 IsBodyHtml = true,
-                Sender = new MailAddress(emailDTO.SenderEmail),
+                Sender = new MailAddress(emailDTO.SenderEmail)
             };
             email.To.Add(new MailAddress(emailDTO.RecepientEmail));
             return client.SendMailAsync(email);

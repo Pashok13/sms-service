@@ -11,6 +11,7 @@ using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.AspNet.Core;
 using System.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace WebApp.Services
 {
@@ -32,9 +33,10 @@ namespace WebApp.Services
 		/// </summary>
 		/// <param name="KeepAliveInterval">Property for changing connection time(seconds) with server</param>
 		/// <param name="serviceScopeFactory">instance of static service</param>
-		public SmsSender(IServiceScopeFactory serviceScopeFactory)
+		public SmsSender(IServiceScopeFactory serviceScopeFactory, IOptions<TwilioAccountDetails> _twilioDetails)
 		{
 			this.serviceScopeFactory = serviceScopeFactory;
+			this.twilioAccountDetails = _twilioDetails.Value;
 		}
 
 		#region Connection methods
@@ -45,12 +47,6 @@ namespace WebApp.Services
 		/// </summary>
 		private async Task Connect()
 		{
-			twilioAccountDetails = new TwilioAccountDetails()
-			{
-				AccountSid = "AC6fef93d6dff1c4286efb77fbaabb8fc6",
-				AuthToken = "473ee9fa65c8ccacf20719d59b7a7ea3"
-			};
-
 			TwilioClient.Init(twilioAccountDetails.AccountSid, twilioAccountDetails.AuthToken);
 		}
 		#endregion
