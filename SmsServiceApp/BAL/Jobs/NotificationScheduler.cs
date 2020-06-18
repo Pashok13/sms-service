@@ -18,7 +18,7 @@ namespace BAL.Jobs
                 .WithIdentity("NotificationTrigger", "default")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                .WithIntervalInSeconds(15)
+                .WithIntervalInMinutes(3)
                 .RepeatForever())
                 .Build();
 

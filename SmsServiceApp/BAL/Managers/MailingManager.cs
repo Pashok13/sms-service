@@ -25,10 +25,11 @@ namespace BAL.Managers
         /// </summary>
         public IEnumerable<MessageDTO> GetUnsentMessages()
         {
+            var timeNow = DateTime.Now;
             var recipients = unitOfWork.Mailings.Get(r => r.MessageState == MessageState.NotSent
-                                                        && r.Company.SendingTime <= DateTime.Now
+                                                        && r.Company.SendingTime < timeNow
                                                         && !r.Company.IsPaused
-														&& r.Company.ApplicationGroup.phoneGroupUnsubscribtions.All(pgu => pgu.PhoneId != r.PhoneId));
+                                                        && r.Company.ApplicationGroup.phoneGroupUnsubscribtions.All(pgu => pgu.PhoneId != r.PhoneId));
             IEnumerable<MessageDTO> result = mapper.Map<IEnumerable<Recipient>, IEnumerable<MessageDTO>>(recipients);
             return result;
         }

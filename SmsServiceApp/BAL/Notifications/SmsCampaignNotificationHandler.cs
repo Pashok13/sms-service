@@ -19,12 +19,13 @@ namespace BAL.Notifications
 
         public override IEnumerable<EmailNotificationDTO> GetAllEmailNotifications()
         {
+            var timeNow = DateTime.Now;
             var notifications = unitOfWork.CampaignNotifications.Get(n =>
                 !n.BeenSent
                 && n.Type == NotificationType.Email
-                && (n.Event == CampaignNotificationEvent.CampaignStart && n.Campaign.StartTime <= DateTime.Now
-                || n.Event == CampaignNotificationEvent.CampaignEnd && n.Campaign.EndTime <= DateTime.Now
-                || n.Event == CampaignNotificationEvent.Sending && n.Campaign.SendingTime <= DateTime.Now));
+                && (n.Event == CampaignNotificationEvent.CampaignStart && n.Campaign.StartTime <= timeNow
+                || n.Event == CampaignNotificationEvent.CampaignEnd && n.Campaign.EndTime <= timeNow
+                || n.Event == CampaignNotificationEvent.Sending && n.Campaign.SendingTime <= timeNow));
             var result = mapper.Map<IEnumerable<CampaignNotification>, IEnumerable<EmailNotificationDTO>>(notifications);
             result = result.Concat(base.notificationHandler.GetAllEmailNotifications());
             return result;
@@ -32,12 +33,13 @@ namespace BAL.Notifications
 
         public override IEnumerable<SmsNotificationDTO> GetAllSmsNotifications()
         {
+            var timeNow = DateTime.Now;
             var notifications = unitOfWork.CampaignNotifications.Get(n =>
                 !n.BeenSent
                 && n.Type == NotificationType.Sms
-                && (n.Event == CampaignNotificationEvent.CampaignStart && n.Campaign.StartTime <= DateTime.Now
-                || n.Event == CampaignNotificationEvent.CampaignEnd && n.Campaign.EndTime <= DateTime.Now
-                || n.Event == CampaignNotificationEvent.Sending && n.Campaign.SendingTime <= DateTime.Now));
+                && ((n.Event == CampaignNotificationEvent.CampaignStart && n.Campaign.StartTime <= timeNow)
+                || (n.Event == CampaignNotificationEvent.CampaignEnd && n.Campaign.EndTime <= timeNow)
+                || (n.Event == CampaignNotificationEvent.Sending && n.Campaign.SendingTime <= timeNow)));
             var result = mapper.Map<IEnumerable<CampaignNotification>, IEnumerable<SmsNotificationDTO>>(notifications);
             result = result.Concat(base.notificationHandler.GetAllSmsNotifications());
             return result;
@@ -54,12 +56,13 @@ namespace BAL.Notifications
 
         private IEnumerable<WebNotificationDTO> GetWebNotificationsForSmsCampaign(string userId, int quantity = 5)
         {
+            var timeNow = DateTime.Now;
             quantity = (quantity < 1) ? 5 : quantity;
             var notifications = unitOfWork.CampaignNotifications.Get(n =>
                 n.Type == NotificationType.Web
-                && (n.Event == CampaignNotificationEvent.CampaignStart && n.Campaign.StartTime <= DateTime.Now
-                || n.Event == CampaignNotificationEvent.CampaignEnd && n.Campaign.EndTime <= DateTime.Now
-                || n.Event == CampaignNotificationEvent.Sending && n.Campaign.SendingTime <= DateTime.Now)
+                && (n.Event == CampaignNotificationEvent.CampaignStart && n.Campaign.StartTime <= timeNow
+                || n.Event == CampaignNotificationEvent.CampaignEnd && n.Campaign.EndTime <= timeNow
+                || n.Event == CampaignNotificationEvent.Sending && n.Campaign.SendingTime <= timeNow)
                 && n.ApplicationUserId == userId)
                 .OrderByDescending(x => Comparer(x)).Take(quantity);
             var result = mapper.Map<IEnumerable<CampaignNotification>, IEnumerable<WebNotificationDTO>>(notifications);
@@ -130,11 +133,12 @@ namespace BAL.Notifications
 
         public override int GetNumOfWebNotifications(string userId)
         {
+            var timeNow = DateTime.Now;
             int result = unitOfWork.CampaignNotifications.Get(n =>
                 n.Type == NotificationType.Web
-                && (n.Event == CampaignNotificationEvent.CampaignStart && n.Campaign.StartTime <= DateTime.Now
-                || n.Event == CampaignNotificationEvent.CampaignEnd && n.Campaign.EndTime <= DateTime.Now
-                || n.Event == CampaignNotificationEvent.Sending && n.Campaign.SendingTime <= DateTime.Now)
+                && (n.Event == CampaignNotificationEvent.CampaignStart && n.Campaign.StartTime <= timeNow
+                || n.Event == CampaignNotificationEvent.CampaignEnd && n.Campaign.EndTime <= timeNow
+                || n.Event == CampaignNotificationEvent.Sending && n.Campaign.SendingTime <= timeNow)
                 && n.ApplicationUserId == userId && !n.BeenSent).Count();
             result += base.notificationHandler.GetNumOfWebNotifications(userId);
             return result;

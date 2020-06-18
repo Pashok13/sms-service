@@ -1,22 +1,16 @@
 ﻿using Model.DTOs;
-using smscc;
-using smscc.SMPP;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using System.IO;
-using Model.Interfaces;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using WebApp.Models;
 using BAL.Managers;
 using BAL.Interfaces;
-using BAL.Exceptions;
-using Microsoft.Extensions.Options;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.AspNet.Core;
+using System.Configuration;
 
 namespace WebApp.Services
 {
@@ -27,7 +21,7 @@ namespace WebApp.Services
 	/// </summary>
 	public class SmsSender : ISmsSender 
 	{
-		private readonly TwilioAccountDetails twilioAccountDetails;
+		private TwilioAccountDetails twilioAccountDetails;
 		private readonly ICollection<MessageDTO> messagesForSend = new List<MessageDTO>();
 		private readonly IServiceScopeFactory serviceScopeFactory;
 
@@ -40,11 +34,6 @@ namespace WebApp.Services
 		/// <param name="serviceScopeFactory">instance of static service</param>
 		public SmsSender(IServiceScopeFactory serviceScopeFactory)
 		{
-			this.twilioAccountDetails = new TwilioAccountDetails()
-			{
-				AccountSid = "AC6fef93d6dff1c4286efb77fbaabb8fc6",
-				AuthToken = "de414b9d9a1bfe1a0d7d6312f353b9f0"
-			};
 			this.serviceScopeFactory = serviceScopeFactory;
 		}
 
@@ -56,10 +45,13 @@ namespace WebApp.Services
 		/// </summary>
 		private async Task Connect()
 		{
-			string accountSid = twilioAccountDetails.AccountSid;
-			string authToken = twilioAccountDetails.AuthToken;
+			twilioAccountDetails = new TwilioAccountDetails()
+			{
+				AccountSid = "AC6fef93d6dff1c4286efb77fbaabb8fc6",
+				AuthToken = "473ee9fa65c8ccacf20719d59b7a7ea3"
+			};
 
-			TwilioClient.Init(accountSid, authToken);
+			TwilioClient.Init(twilioAccountDetails.AccountSid, twilioAccountDetails.AuthToken);
 		}
 		#endregion
 
@@ -70,21 +62,34 @@ namespace WebApp.Services
 		/// <param name="messages">Collection of messages for send</param>
 		public async Task SendMessages(IEnumerable<MessageDTO> messages)
 		{
-			await Connect();
-
-			foreach (MessageDTO message in messages)
-				await SendMessage(message);
+			if (messages.Any())
+			{
+				foreach (MessageDTO message in messages)
+				{
+					messagesForSend.Add(message);
+					await SendMessage(message);
+				}
+			}
 		}
 
 		public async Task SendMessage(MessageDTO message)
 		{
-			var responseMessage = MessageResource.Create(
-			body: message.MessageText,
-			from: new Twilio.Types.PhoneNumber(message.SenderPhone),
-			to: new Twilio.Types.PhoneNumber(message.RecepientPhone)
-			);
+			try
+			{
+				await Connect();
 
-			ChangeMessageState(2, responseMessage.Sid);
+				var responseMessage = MessageResource.Create(
+				body: message.MessageText,
+				from: new Twilio.Types.PhoneNumber(message.SenderPhone),
+				to: new Twilio.Types.PhoneNumber(message.RecepientPhone)
+				);
+
+				ChangeMessageState(2, message.ServerId);
+			}
+			catch(Exception ex)
+			{
+				ChangeMessageState(8, message.ServerId);
+			}
 		}
 
 		public async Task ReceiveMessage(TwiMLResult e)

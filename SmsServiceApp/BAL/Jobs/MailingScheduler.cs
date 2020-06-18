@@ -23,7 +23,7 @@ namespace BAL.Jobs
                 .WithIdentity("MailingTrigger", "default")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                .WithIntervalInMinutes(5)
+                .WithIntervalInMinutes(1)
                 .RepeatForever())
                 .Build();
 
