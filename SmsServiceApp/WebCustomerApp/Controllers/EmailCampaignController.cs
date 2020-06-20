@@ -60,6 +60,8 @@ namespace WebApp.Controllers
                 campaign.SendingTime = DateTime.Now;
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             campaign.UserId = userId;
+            if (string.IsNullOrEmpty(campaign.EmailAddress))
+                campaign.EmailAddress = campaign.Name;
             emailCampaignManager.IncertWithRecepients(campaign, recepients);
             return Json(new { newUrl = Url.Action("Index", "EmailCampaign") });
         }

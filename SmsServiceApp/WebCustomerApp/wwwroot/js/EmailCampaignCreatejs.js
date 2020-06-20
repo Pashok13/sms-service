@@ -56,21 +56,13 @@
         FirstStep() {
             this.Campaign.sendingTime = document.getElementById('result').value;
             var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-            if (this.Campaign.name == "" || this.Campaign.emailAddress == "" ||
-                (this.Campaign.sendingTime == "" && !this.Campaign.sendNow) || !re.test(this.Campaign.emailAddress)) {
+            if (this.Campaign.name == "" ||
+                (this.Campaign.sendingTime == "" && !this.Campaign.sendNow)) {
                 if (this.Campaign.name == "")
                     $("#NameValidationError").text("Name field is required");
                 else
                     $("#NameValidationError").text("");
-                if (this.Campaign.emailAddress == "")
-                    $("#EmailValidationError").text("Email field is required");
-                else {
-                    if (!re.test(this.Campaign.emailAddress))
-                        $("#EmailValidationError").text("Invalid email");
-                    else
-                        $("#EmailValidationError").text("");
-                }
-                if (this.Campaign.sendingTime == "")
+                if (this.Campaign.sendingTime == "" && !this.Campaign.sendNow)
                     $("#SendTimeValidationError").text("Time of send field is required");
                 else
                     $("#SendTimeValidationError").text("");

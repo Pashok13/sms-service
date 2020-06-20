@@ -30,10 +30,13 @@ namespace WebApp.Services
                 EnableSsl = true,
                 Credentials = new System.Net.NetworkCredential(from, code)
             };
-            var mail = new MailMessage(from, email);
-			mail.Subject = subject;
-			mail.Body = message;
-			mail.IsBodyHtml = true;
+            var mail = new MailMessage(from, email)
+            {
+                From = new MailAddress(from, "SMS Sender"),
+                Subject = subject,
+                Body = message,
+                IsBodyHtml = true
+            };
 			return client.SendMailAsync(mail);
 		}
 
@@ -46,14 +49,14 @@ namespace WebApp.Services
                 EnableSsl = true,
                 Credentials = new System.Net.NetworkCredential(from, code)
             };
-            MailMessage email = new MailMessage()
+            MailMessage email = new MailMessage(from, emailDTO.RecepientEmail)
             {
-                From = new MailAddress(emailDTO.SenderEmail),
+                From = new MailAddress(from, "SMS Sender"),
                 Body = emailDTO.MessageText,
                 IsBodyHtml = true,
-                Sender = new MailAddress(emailDTO.SenderEmail)
+                Subject = emailDTO.SenderEmail,
+                
             };
-            email.To.Add(new MailAddress(emailDTO.RecepientEmail));
             return client.SendMailAsync(email);
         }
 

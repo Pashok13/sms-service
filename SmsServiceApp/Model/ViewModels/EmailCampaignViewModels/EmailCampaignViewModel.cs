@@ -11,7 +11,6 @@ namespace Model.ViewModels.EmailCampaignViewModels
         public int Id { get; set; }
         public string UserId { get; set; }
         public int EmailId { get; set; }
-        [Required(ErrorMessage = "The Email field is required.")]
         [Display(Name = "Email")]
         [EmailAddress]
         public string EmailAddress { get; set; }
