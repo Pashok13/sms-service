@@ -26,7 +26,7 @@
     <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <script src='https://cloud.tinymce.com/5/tinymce.min.js'></script>
     <script src="~/js/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@1.x/dist/vuetify.js"></script>
     <script src="~/js/axios.js"></script>
     <script>
         (function ($) {
@@ -146,11 +146,10 @@
                                     <v-layout row justify-center>
                                         <v-dialog v-model="dialog" persistent max-width="600px" style="z-index:1040;">
                                             <template v-slot:activator="{ on }">
-                                                <v-btn color="primary" v-if="Campaign.recipientsCount < 100" dark v-on="on">@Localizer["Add"]</v-btn>
+                                                <v-btn color="primary" v-if="Campaign.recipientsCount < 100" v-on="on">@Localizer["Add"]</v-btn>
                                             </template>
                                             <v-tabs v-model="active"
                                                     color="cyan"
-                                                    dark
                                                     slider-color="yellow">
                                                 <v-tab :key="1"
                                                        ripple>
