@@ -32,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ./SmsServiceApp/WebCustomerApp/bin/Release/netcoreapp2.1
+          path: ./SmsServiceApp/WebCustomerApp/bin/Release/netcoreapp2.1/publish
 
   deploy:
     runs-on: windows-latest
